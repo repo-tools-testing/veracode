@@ -38,7 +38,7 @@ jobs:
   register:
     uses: ./.github/workflows/veracode-check-run.yml
     with:
-      check_run_name: ${{ github.workflow }} - ${{github.event_name}}
+      check_run_name: ${{ github.workflow }} - ${{github.event.action}}
       head_sha: ${{ github.event.client_payload.sha }}
       repositroy_owner: ${{ github.event.client_payload.repository.owner }}
       repositroy_name: ${{ github.event.client_payload.repository.name }}
