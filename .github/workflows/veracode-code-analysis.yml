@@ -38,6 +38,7 @@ jobs:
   register:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Register Policy Scan Check
         if: contains(github.event.action, 'policy')
         uses: ./.github/workflows/veracode-check-run.yml
