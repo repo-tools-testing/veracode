@@ -36,16 +36,32 @@ on:
 
 jobs:
   register:
-    uses: ./.github/workflows/veracode-check-run.yml
-    with:
-      check_run_name: ${{ github.workflow }} - ${{github.event.action}}
-      head_sha: ${{ github.event.client_payload.sha }}
-      repositroy_owner: ${{ github.event.client_payload.repository.owner }}
-      repositroy_name: ${{ github.event.client_payload.repository.name }}
-      event_type: ${{ github.event.client_payload.event_type }}
-      github_token: ${{ github.event.client_payload.token }}
-      run_id: ${{ github.run_id }}
-      branch: ${{ github.event.client_payload.repository.branch }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Register Policy Scan Check
+        if: contains(github.event.action, 'policy')
+        uses: ./.github/workflows/veracode-check-run.yml
+        with:
+          check_run_name: ${{ github.workflow }} - Policy Scan
+          head_sha: ${{ github.event.client_payload.sha }}
+          repositroy_owner: ${{ github.event.client_payload.repository.owner }}
+          repositroy_name: ${{ github.event.client_payload.repository.name }}
+          event_type: ${{ github.event.client_payload.event_type }}
+          github_token: ${{ github.event.client_payload.token }}
+          run_id: ${{ github.run_id }}
+          branch: ${{ github.event.client_payload.repository.branch }}
+      - name: Register Pipeline Scan Check
+        if: contains(github.event.action, 'pipeline')
+        uses: ./.github/workflows/veracode-check-run.yml
+        with:
+          check_run_name: ${{ github.workflow }} - Pipeline
+          head_sha: ${{ github.event.client_payload.sha }}
+          repositroy_owner: ${{ github.event.client_payload.repository.owner }}
+          repositroy_name: ${{ github.event.client_payload.repository.name }}
+          event_type: ${{ github.event.client_payload.event_type }}
+          github_token: ${{ github.event.client_payload.token }}
+          run_id: ${{ github.run_id }}
+          branch: ${{ github.event.client_payload.repository.branch }}
 
   validations:
     needs: register
